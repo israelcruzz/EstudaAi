@@ -1,6 +1,6 @@
 # Estuda.Ai
 
-![Imagem da Home](link-para-sua-imagem-aqui)
+![Imagem da Home](https://github.com/israelcruzz/estuda-ai-web/blob/main/Home.png?raw=true)
 
 **estuda.ai** é uma plataforma interativa projetada para ajudar estudantes da ETEC a aprimorar seus conhecimentos e se preparar para provas. Com um bot especializado, os usuários podem fazer perguntas relacionadas aos conteúdos da ETEC. A plataforma também oferece acesso a simulados e provas antigas, permitindo que os alunos treinem e se familiarizem com o formato das avaliações.
 
