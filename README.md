@@ -23,3 +23,11 @@
   - **CSS**: Estilização e design da aplicação.
   - **TypeScript**: Desenvolvimento robusto e seguro.
 ---
+
+## Contribuidores
+Agradecemos a todos os contribuidores que ajudaram a tornar o estuda.ai uma realidade!
+
+| Nome                                                             
+|-----------------------------------------------------------------------------------------------|
+| **<a href="https://github.com/israelcruzz">Israel Cruz</a>**      
+
