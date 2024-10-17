@@ -14,52 +14,58 @@ class Chatbot {
         this.sendButton = document.querySelector(".send-button");
         this.messagesArea = document.querySelector(".messages-area");
         this.helpArea = document.querySelector(".help-area");
+        this.handleSendMessage = () => __awaiter(this, void 0, void 0, function* () {
+            var _a, _b, _c;
+            if (((_a = this.inputUser) === null || _a === void 0 ? void 0 : _a.value) === "") {
+                ToastService.showToastAlert("Por favor, digite sua pergunta!");
+                return;
+            }
+            if (((_b = this.inputUser) === null || _b === void 0 ? void 0 : _b.value.length) < 3) {
+                ToastService.showToastAlert("Sua pergunta tem que ter pelo menos 3 caracteres");
+                return;
+            }
+            this.helpArea.classList.add("hidden");
+            this.addStudentMessageInLocalStorage();
+            this.addStudentMessage();
+            const messageElementLoading = this.generateLoadingMessage();
+            try {
+                const request = yield fetch("http://localhost:3000/chatbot", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        prompt: (_c = this.inputUser) === null || _c === void 0 ? void 0 : _c.value
+                    })
+                });
+                this.cleanInput();
+                const response = yield request.json();
+                messageElementLoading.remove();
+                this.addBotMessage(response.message);
+                this.addBotMessageInLocalStorage(response.message);
+            }
+            catch (error) {
+                if (error instanceof TypeError) {
+                    console.error("Erro interno ao fazer requisição", error);
+                    this.cleanInput();
+                    messageElementLoading.remove();
+                    ToastService.showToastAlert("Erro interno");
+                }
+                console.log(error);
+            }
+        });
         this.init();
         this.loadMessages();
     }
     init() {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a;
-            (_a = this.sendButton) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
-                var _a, _b, _c;
-                if (((_a = this.inputUser) === null || _a === void 0 ? void 0 : _a.value) === "") {
-                    ToastService.showToastAlert("Por favor, digite sua pergunta!");
-                    return;
+            var _a, _b;
+            (_a = this.sendButton) === null || _a === void 0 ? void 0 : _a.addEventListener("click", this.handleSendMessage);
+            (_b = this.inputUser) === null || _b === void 0 ? void 0 : _b.addEventListener("keyup", (event) => {
+                if (event.key === "Enter") {
+                    this.handleSendMessage();
                 }
-                if (((_b = this.inputUser) === null || _b === void 0 ? void 0 : _b.value.length) < 3) {
-                    ToastService.showToastAlert("Sua pergunta tem que ter pelo menos 3 caracteres");
-                    return;
-                }
-                this.helpArea.classList.add("hidden");
-                this.addStudentMessageInLocalStorage();
-                this.addStudentMessage();
-                const messageElementLoading = this.generateLoadingMessage();
-                try {
-                    const request = yield fetch("http://localhost:3000/chatbot", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            prompt: (_c = this.inputUser) === null || _c === void 0 ? void 0 : _c.value
-                        })
-                    });
-                    this.cleanInput();
-                    const response = yield request.json();
-                    messageElementLoading.remove();
-                    this.addBotMessage(response.message);
-                    this.addBotMessageInLocalStorage(response.message);
-                }
-                catch (error) {
-                    if (error instanceof TypeError) {
-                        console.error("Erro interno ao fazer requisição", error);
-                        this.cleanInput();
-                        messageElementLoading.remove();
-                        ToastService.showToastAlert("Erro interno");
-                    }
-                    console.log(error);
-                }
-            }));
+            });
         });
     }
     addStudentMessage() {

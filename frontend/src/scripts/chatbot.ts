@@ -18,56 +18,63 @@ class Chatbot {
         this.init();
         this.loadMessages();
     }
-
+    
     public async init() {
-        this.sendButton?.addEventListener("click", async () => {
-            if(this.inputUser?.value === "") {
-                ToastService.showToastAlert("Por favor, digite sua pergunta!");
-                return;
-            }
-
-            if(this.inputUser?.value.length < 3) {
-                ToastService.showToastAlert("Sua pergunta tem que ter pelo menos 3 caracteres");
-                return;
-            }
-
-            this.helpArea.classList.add("hidden");
-
-            this.addStudentMessageInLocalStorage();
-            
-            this.addStudentMessage();
-
-            const messageElementLoading = this.generateLoadingMessage();
-            
-            try {
-                const request = await fetch("http://localhost:3000/chatbot", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        prompt: this.inputUser?.value
-                    })
-                })
-
-                this.cleanInput();
-                
-                const response = await request.json() as HttpResponse;
-
-                messageElementLoading.remove();
-                this.addBotMessage(response.message);
-                this.addBotMessageInLocalStorage(response.message);
-            } catch (error) {
-                if (error instanceof TypeError) {
-                    console.error("Erro interno ao fazer requisição", error);
-                    this.cleanInput();
-                    messageElementLoading.remove();
-                    ToastService.showToastAlert("Erro interno");
-                }
-
-                console.log(error)
+        this.sendButton?.addEventListener("click", this.handleSendMessage);
+        this.inputUser?.addEventListener("keyup", (event) => {
+            if (event.key === "Enter") {
+                this.handleSendMessage();
             }
         })
+    }
+
+    public handleSendMessage = async () => {
+        if (this.inputUser?.value === "") {
+            ToastService.showToastAlert("Por favor, digite sua pergunta!");
+            return;
+        }
+    
+        if (this.inputUser?.value.length < 3) {
+            ToastService.showToastAlert("Sua pergunta tem que ter pelo menos 3 caracteres");
+            return;
+        }
+    
+        this.helpArea.classList.add("hidden");
+    
+        this.addStudentMessageInLocalStorage();
+        
+        this.addStudentMessage();
+    
+        const messageElementLoading = this.generateLoadingMessage();
+        
+        try {
+            const request = await fetch("http://localhost:3000/chatbot", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    prompt: this.inputUser?.value
+                })
+            })
+    
+            this.cleanInput();
+            
+            const response = await request.json() as HttpResponse;
+    
+            messageElementLoading.remove();
+            this.addBotMessage(response.message);
+            this.addBotMessageInLocalStorage(response.message);
+        } catch (error) {
+            if (error instanceof TypeError) {
+                console.error("Erro interno ao fazer requisição", error);
+                this.cleanInput();
+                messageElementLoading.remove();
+                ToastService.showToastAlert("Erro interno");
+            }
+    
+            console.log(error);
+        }
     }
 
     public addStudentMessage() {
