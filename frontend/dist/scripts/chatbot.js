@@ -15,6 +15,7 @@ class Chatbot {
         this.messagesArea = document.querySelector(".messages-area");
         this.helpArea = document.querySelector(".help-area");
         this.init();
+        this.loadMessages();
     }
     init() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -30,6 +31,7 @@ class Chatbot {
                     return;
                 }
                 this.helpArea.classList.add("hidden");
+                this.addStudentMessageInLocalStorage();
                 this.addStudentMessage();
                 const messageElementLoading = this.generateLoadingMessage();
                 try {
@@ -46,6 +48,7 @@ class Chatbot {
                     const response = yield request.json();
                     messageElementLoading.remove();
                     this.addBotMessage(response.message);
+                    this.addBotMessageInLocalStorage(response.message);
                 }
                 catch (error) {
                     if (error instanceof TypeError) {
@@ -91,6 +94,41 @@ class Chatbot {
         div.appendChild(span);
         this.messagesArea.appendChild(div);
         return div;
+    }
+    addStudentMessageInLocalStorage() {
+        var _a;
+        const studentMessageObject = {
+            message: (_a = this.inputUser) === null || _a === void 0 ? void 0 : _a.value,
+            isBot: false
+        };
+        let getLocalStorage = JSON.parse(localStorage.getItem("@estuda.ai-chatbot/message") || '[]');
+        getLocalStorage.push(studentMessageObject);
+        localStorage.setItem("@estuda.ai-chatbot/message", JSON.stringify(getLocalStorage));
+    }
+    addBotMessageInLocalStorage(message) {
+        const botMessageObject = {
+            message,
+            isBot: true
+        };
+        let getLocalStorage = JSON.parse(localStorage.getItem("@estuda.ai-chatbot/message") || '[]');
+        getLocalStorage.push(botMessageObject);
+        localStorage.setItem("@estuda.ai-chatbot/message", JSON.stringify(getLocalStorage));
+    }
+    loadMessages() {
+        const getLocalStorage = localStorage.getItem("@estuda.ai-chatbot/message");
+        if (getLocalStorage !== null) {
+            this.helpArea.classList.add("hidden");
+            const messages = JSON.parse(getLocalStorage);
+            messages.forEach((message) => {
+                const div = document.createElement("div");
+                const span = document.createElement("span");
+                span.textContent = message.message;
+                span.classList.add("text-white");
+                div.appendChild(span);
+                message.isBot ? div.classList.add("bot-message") : div.classList.add("client-message");
+                this.messagesArea.appendChild(div);
+            });
+        }
     }
 }
 class ToastService {

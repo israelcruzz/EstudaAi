@@ -3,6 +3,11 @@ interface HttpResponse {
     prompt: string
 }
 
+interface MessageStorage {
+    message: string,
+    isBot: boolean
+}
+
 class Chatbot {
     public inputUser = document.getElementById("inpt-chat") as HTMLInputElement;
     public sendButton = document.querySelector(".send-button") as HTMLButtonElement;
@@ -11,6 +16,7 @@ class Chatbot {
 
     constructor() {
         this.init();
+        this.loadMessages();
     }
 
     public async init() {
@@ -26,6 +32,8 @@ class Chatbot {
             }
 
             this.helpArea.classList.add("hidden");
+
+            this.addStudentMessageInLocalStorage();
             
             this.addStudentMessage();
 
@@ -48,6 +56,7 @@ class Chatbot {
 
                 messageElementLoading.remove();
                 this.addBotMessage(response.message);
+                this.addBotMessageInLocalStorage(response.message);
             } catch (error) {
                 if (error instanceof TypeError) {
                     console.error("Erro interno ao fazer requisição", error);
@@ -105,6 +114,55 @@ class Chatbot {
         this.messagesArea.appendChild(div);
 
         return div;
+    }
+
+    public addStudentMessageInLocalStorage() {
+        const studentMessageObject: MessageStorage = {
+            message: this.inputUser?.value,
+            isBot: false
+        }
+        
+        let getLocalStorage: MessageStorage[] = JSON.parse(localStorage.getItem("@estuda.ai-chatbot/message") || '[]');
+
+        getLocalStorage.push(studentMessageObject);
+
+        localStorage.setItem("@estuda.ai-chatbot/message", JSON.stringify(getLocalStorage));
+    }
+
+    public addBotMessageInLocalStorage(message: string) {
+        const botMessageObject: MessageStorage = {
+            message,
+            isBot: true
+        }
+
+        let getLocalStorage: MessageStorage[] = JSON.parse(localStorage.getItem("@estuda.ai-chatbot/message") || '[]');
+
+        getLocalStorage.push(botMessageObject);
+
+        localStorage.setItem("@estuda.ai-chatbot/message", JSON.stringify(getLocalStorage));
+    }
+
+    public loadMessages() {
+        const getLocalStorage = localStorage.getItem("@estuda.ai-chatbot/message");
+
+        if (getLocalStorage !== null) {
+            this.helpArea.classList.add("hidden");
+            const messages: MessageStorage[] = JSON.parse(getLocalStorage);
+
+            messages.forEach((message) => {
+                const div = document.createElement("div");
+                const span = document.createElement("span");
+
+                span.textContent = message.message;
+                span.classList.add("text-white");
+
+                div.appendChild(span);
+
+                message.isBot ? div.classList.add("bot-message") : div.classList.add("client-message");
+
+                this.messagesArea.appendChild(div);
+            })
+        }
     }
 }
 
