@@ -1,43 +1,78 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../styles/index.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../styles/index.css" />
     <title>Estuda.Ai</title>
-</head>
-<body>
+  </head>
+  <body>
     <main class="container">
-        <section class="sidebar w-[320px] flex flex-col gap-10">
-            <div class="flex gap-2">
-                <i data-lucide="book-copy" class="logo"></i>
-                <span class="font-bold text-white text-2xl">Estuda.Ai</span>
+      <section class="sidebar w-[320px] flex flex-col gap-10">
+        <div class="flex gap-2">
+          <i data-lucide="book-copy" class="logo"></i>
+          <span class="font-bold text-white text-2xl">Estuda.Ai</span>
+        </div>
+
+        <nav class="flex flex-col gap-6">
+          <a
+            href="./index.html"
+            data-page="index"
+            class="nav-item nav-item-area"
+          >
+            <i data-lucide="home"></i>
+            <span class="font-bold text-xl">Home</span>
+          </a>
+
+          <a
+            href="./chatbot.html"
+            data-page="chatbot"
+            class="nav-item nav-item-area"
+          >
+            <i data-lucide="bot-message-square"></i>
+            <span class="font-bold text-xl">Chat</span>
+          </a>
+
+          <a
+            href="./simulados.html"
+            data-page="simulados"
+            class="nav-item nav-item-area"
+          >
+            <i data-lucide="notebook-text"></i>
+            <span class="font-bold text-xl">Simulados</span>
+          </a>
+        </nav>
+      </section>
+
+      <section>
+        <div class="w-[352px] h-[200px] bg-red-500 rounded-3xl p-2">
+          <div>
+            <header>
+              <img src="" alt="" />
+              <div>
+                <span class="text-white">Exatas</span>
+              </div>
+            </header>
+
+            <h2>Simulado - Exatas</h2>
+          </div>
+
+          <div>
+            <img src="" alt="" />
+            <div>
+              <span>Questões</span>
+              <span class="text-white">10</span>
             </div>
-
-            <nav class="flex flex-col gap-6">
-                <a href="./index.html" data-page="index" class="nav-item nav-item-area">
-                    <i data-lucide="home"></i>
-                    <span class="font-bold text-xl">Home</span>
-                </a>
-
-                <a href="./chatbot.html" data-page="chatbot" class="nav-item nav-item-area">
-                    <i data-lucide="bot-message-square"></i>
-                    <span class="font-bold text-xl">Chat</span>
-                </a>
-
-                <a href="./simulados.html" data-page="simulados" class="nav-item nav-item-area">
-                    <i data-lucide="notebook-text"></i>
-                    <span class="font-bold text-xl">Simulados</span>
-                </a>
-            </nav>
-        </section>
+          </div>
+        </div>
+      </section>
     </main>
 
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="../../dist/scripts/navbar.js"></script>
     <script>
-        lucide.createIcons();
+      lucide.createIcons();
     </script>
-</body>
+  </body>
 </html>
